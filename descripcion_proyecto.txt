@@ -1,0 +1,7 @@
+Desarrollado por: Julian Andres Ramirez Jimenez
+Parcial 2 - Teoria de la Conmutación
+	
+Este proyecto consiste en tomar datos de temperatura y
+humedad para ser visualizados en una pagina web que va a
+permitir visualizar los datos actuales y un historico de 
+datos en el tiempo mediante graficas y tablas.
