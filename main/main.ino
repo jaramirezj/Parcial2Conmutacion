@@ -1,11 +1,12 @@
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <WiFiClient.h>
 #include <DHT.h>
 
-const char* ssid = "";
-const char* password = "";
-const char* host = "192.168.1.29";
-const int port =80;
-const int watchdog = 5000;
+const char* ssid = "UNE_HFC_7BB0";
+const char* password = "AAA0BF87";
+String receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizar.php";//Ruta donde se enviaran los datos
+
 #define DHTTYPE DHT11 
 #define dht_dpin 0
 DHT dht(dht_dpin, DHTTYPE);
@@ -35,13 +36,31 @@ void enviarDatos(){
   Serial.println(humedad);
   tempT = 0;
   tempH = 0;
+
+  WiFiClient client;
+  HTTPClient http;
+  String datos = "?temperatura="+String(temperatura)+"&humedad="+String(humedad);
+  String path = receptor + datos;
+  http.begin(client, path.c_str());
+  // Send HTTP GET request
+  int httpResponseCode = http.GET();
+  if (httpResponseCode>0) {
+     Serial.print("HTTP Response code: ");
+     Serial.println(httpResponseCode);
+     String payload = http.getString();
+     Serial.println(payload);
+  }
+  else{
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+  }
+  http.end();
 }
 
 void loop() {
   tInicial = millis();
   tActual = millis();
   while(tActual - tInicial <= 30000){
-    
     tempT += dht.readTemperature();
     tempH += dht.readHumidity();
     delay(1000);
