@@ -1,16 +1,21 @@
 -- -----------------------------------------------------
--- Schema DatosIoT
+-- Schema datosiot
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `DatosIoT` DEFAULT CHARACTER SET utf8 ;
-USE `DatosIoT` ;
 
 -- -----------------------------------------------------
--- Table `DatosIoT`.`registro`
+-- Schema datosiot
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DatosIoT`.`registro` (
+CREATE SCHEMA IF NOT EXISTS `datosiot` DEFAULT CHARACTER SET utf8 ;
+USE `datosiot` ;
+
+-- -----------------------------------------------------
+-- Table `datosiot`.`registro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `datosiot`.`registro` (
   `idregistro` INT NOT NULL AUTO_INCREMENT,
-  `temperatura` FLOAT NOT NULL,
   `humedad` FLOAT NOT NULL,
+  `temperatura` FLOAT NOT NULL,
+  `lluvia` BOOLEAN NOT NULL,
   `fecha_hora` TIMESTAMP NOT NULL,
   PRIMARY KEY (`idregistro`))
 ENGINE = InnoDB;
