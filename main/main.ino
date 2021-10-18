@@ -13,6 +13,8 @@ String receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizar.php";//
 #define dht_dpin 0
 DHT dht(dht_dpin, DHTTYPE);
 
+void ICACHE_RAM_ATTR actualizarLluvia();
+
 unsigned long tInicial;
 unsigned long tActual;
 float tempT = 0;
@@ -20,11 +22,6 @@ float tempH = 0;
 float temperatura;
 float humedad;
 int lluvia = 0;
-
-void actualizarLluvia(){
-  Serial.println("Cambio en la lluvia");
-  enviarDatos(false);
-}
 
 void setup() {
   Serial.begin(9600);
@@ -36,15 +33,21 @@ void setup() {
   Serial.println("/n Conectado");
   dht.begin();
   pinMode(pinLluvia, INPUT_PULLUP);
-  attachInterrupt(pinLluvia,actualizarLluvia,CHANGE);
+  attachInterrupt(digitalPinToInterrupt(pinLluvia),actualizarLluvia,RISING);
   temperatura = dht.readTemperature();
   humedad = dht.readHumidity();
   enviarDatos(true);
 }
 
+void actualizarLluvia(){
+  Serial.println("Cambio en la lluvia");
+  enviarDatos(false);
+}
+
 void enviarDatos(bool operacion){
   WiFiClient client;
   HTTPClient http;
+  String datos = "";
   if(operacion == true){
     Serial.print("T:");
     Serial.print(temperatura);
@@ -52,10 +55,10 @@ void enviarDatos(bool operacion){
     Serial.println(humedad);
     tempT = 0;
     tempH = 0;
-    String datos = "?temperatura="+String(temperatura)+"&humedad="+String(humedad)+"&lluvia="+String(lluvia); 
+    datos = "?temperatura="+String(temperatura)+"&humedad="+String(humedad)+"&lluvia="+String(lluvia); 
   }else{
-    String datos = "?lluvia="+String(lluvia);
-      String receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizarLluvia.php";//Ruta donde se enviara la actualización
+    datos = "?lluvia="+String(lluvia);
+    receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizarLluvia.php";//Ruta donde se enviara la actualización
   }
   String path = receptor + datos;
   http.begin(client, path.c_str());
