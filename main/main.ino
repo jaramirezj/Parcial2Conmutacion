@@ -21,7 +21,7 @@ float tempT = 0;
 float tempH = 0;
 float temperatura;
 float humedad;
-int lluvia = 0;
+unsigned int lluvia = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -36,30 +36,25 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(pinLluvia),actualizarLluvia,RISING);
   temperatura = dht.readTemperature();
   humedad = dht.readHumidity();
-  enviarDatos(true);
+  enviarDatos();
 }
 
 void actualizarLluvia(){
   Serial.println("Cambio en la lluvia");
-  enviarDatos(false);
+  lluvia = digitalRead(pinLluvia);
 }
 
-void enviarDatos(bool operacion){
+void enviarDatos(){
   WiFiClient client;
   HTTPClient http;
   String datos = "";
-  if(operacion == true){
-    Serial.print("T:");
-    Serial.print(temperatura);
-    Serial.print(" H:");
-    Serial.println(humedad);
-    tempT = 0;
-    tempH = 0;
-    datos = "?temperatura="+String(temperatura)+"&humedad="+String(humedad)+"&lluvia="+String(lluvia); 
-  }else{
-    datos = "?lluvia="+String(lluvia);
-    receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizarLluvia.php";//Ruta donde se enviara la actualización
-  }
+  Serial.print("T:");
+  Serial.print(temperatura);
+  Serial.print(" H:");
+  Serial.println(humedad);
+  tempT = 0;
+  tempH = 0;
+  datos = "?temperatura="+String(temperatura)+"&humedad="+String(humedad)+"&lluvia="+String(lluvia); 
   String path = receptor + datos;
   http.begin(client, path.c_str());
   // Send HTTP GET request
@@ -88,5 +83,5 @@ void loop() {
   }
   temperatura = tempT / 30;
   humedad = tempH / 30;
-  enviarDatos(true);
+  enviarDatos();
 }
