@@ -13,8 +13,6 @@ String receptor = "http://192.168.1.14:80/Parcial2Conmutacion/actualizar.php";//
 #define dht_dpin 0
 DHT dht(dht_dpin, DHTTYPE);
 
-void ICACHE_RAM_ATTR actualizarLluvia();
-
 unsigned long tInicial;
 unsigned long tActual;
 float tempT = 0;
@@ -22,6 +20,8 @@ float tempH = 0;
 float temperatura;
 float humedad;
 unsigned int lluvia = 0;
+
+void ICACHE_RAM_ATTR actualizarLluvia ();
 
 void setup() {
   Serial.begin(9600);
@@ -33,14 +33,27 @@ void setup() {
   Serial.println("/n Conectado");
   dht.begin();
   pinMode(pinLluvia, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(pinLluvia),actualizarLluvia,RISING);
+  attachInterrupt(digitalPinToInterrupt(pinLluvia),actualizarLluvia,CHANGE);
   temperatura = dht.readTemperature();
   humedad = dht.readHumidity();
   enviarDatos();
 }
 
+void loop() {
+  tInicial = millis();
+  tActual = millis();
+  while(tActual - tInicial <= 30000){
+    tempT += dht.readTemperature();
+    tempH += dht.readHumidity();
+    delay(1000);
+    tActual = millis();
+  }
+  temperatura = tempT / 30;
+  humedad = tempH / 30;
+  enviarDatos();
+}
+
 void actualizarLluvia(){
-  Serial.println("Cambio en la lluvia");
   lluvia = digitalRead(pinLluvia);
 }
 
@@ -70,18 +83,4 @@ void enviarDatos(){
     Serial.println(httpResponseCode);
   }
   http.end();
-}
-
-void loop() {
-  tInicial = millis();
-  tActual = millis();
-  while(tActual - tInicial <= 30000){
-    tempT += dht.readTemperature();
-    tempH += dht.readHumidity();
-    delay(1000);
-    tActual = millis();
-  }
-  temperatura = tempT / 30;
-  humedad = tempH / 30;
-  enviarDatos();
 }

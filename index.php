@@ -81,54 +81,54 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
-        <canvas id="temperatureChart"  height="130px">
-          <script>
-            var temperatureCanvas = document.getElementById("temperatureChart");
-            Chart.defaults.global.defaultFontFamily = "Lato";
-            Chart.defaults.global.defaultFontSize = 18;
-            var temperatureData = {   
-                labels: 
-                    [<?php for($i = count($fecha_hora)-1; $i >= 0; $i--){?>
-                        "<?php echo $fecha_hora[$i]; ?>",
-                    <?php } ?> ],
-                datasets: [{
-                    label: "Temperatura(°C) ",
-                    data:
-                        [<?php for($i = count($fecha_hora)-1; $i >= 0; $i--){ ?> 
-                            <?php echo $datos_temp[$i]; ?>,
-                        <?php } ?>   ],
-                    lineTension: 0,
-                    fill: false,
-                    borderColor: 'blue',
-                    backgroundColor: 'transparent',
-                    borderDash: [5, 5],
-                    pointBorderColor: 'orange',
-                    pointBackgroundColor: 'rgba(255,150,0,0.5)',
-                    pointRadius: 5,
-                    pointHoverRadius: 10,
-                    pointHitRadius: 30,
-                    pointBorderWidth: 2,
-                    pointStyle: 'rectRounded'
-                }]
-            };
-            var chartOptions = {    
-            legend: {
-             display: true,
-                 position: 'top',
-                labels: {
-                 boxWidth: 80,
-                 fontColor: 'navy'
-             }
-             }
-            };
-            var lineChart = new Chart(temperatureCanvas, {
-                type: 'line',
-                data: temperatureData,
-                options: chartOptions
-            });
-          </script>
-         </canvas>
+    <div class="col-sm-6">
+            <canvas id="temperatureChart" height="130px">
+                <script>
+                    var temperatureCanvas = document.getElementById("temperatureChart");
+                    Chart.defaults.global.defaultFontFamily = "Lato";
+                    Chart.defaults.global.defaultFontSize = 18;
+                    var temperatureData = {   
+                        labels: 
+                            [<?php for($i = count($fecha_hora)-1; $i >= 0; $i--){?>
+                                "<?php echo $fecha_hora[$i]; ?>",
+                            <?php } ?> ],
+                        datasets: [{
+                            label: "Temperatura(°C) ",
+                            data:
+                                [<?php for($i = count($fecha_hora)-1; $i >= 0; $i--){?> 
+                                    <?php echo $datos_temp[$i]; ?>,
+                                <?php } ?>   ],
+                            lineTension: 0,
+                            fill: false,
+                            borderColor: 'blue',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            pointBorderColor: 'orange',
+                            pointBackgroundColor: 'rgba(255,150,0,0.5)',
+                            pointRadius: 5,
+                                pointHoverRadius: 10,
+                            pointHitRadius: 30,
+                            pointBorderWidth: 2,
+                            pointStyle: 'rectRounded'
+                        }]
+                    };
+                    var chartOptions = {    
+                    legend: {
+                    display: true,
+                        position: 'top',
+                        labels: {
+                         boxWidth: 80,
+                         fontColor: 'navy'
+                    }
+                    }
+                    };
+                    var lineChart = new Chart(temperatureCanvas, {
+                        type: 'line',
+                        data: temperatureData,
+                        options: chartOptions
+                    });
+                </script>
+            </canvas>
         </div>
         <div class="col-sm-6">
             <canvas id="humidityChart" height="130px">
